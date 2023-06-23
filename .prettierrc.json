@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": "userRoute.js",
+      "options": {
+        "printWidth": 200
+      }
+    }
+  ]
+}

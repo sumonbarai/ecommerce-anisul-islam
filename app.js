@@ -15,6 +15,7 @@ const hpp = require("hpp");
 const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const { mongodbConnection } = require("./src/config/db");
+const { errorResponse } = require("./src/controllers/responseController");
 
 const app = express();
 
@@ -48,7 +49,6 @@ app.use(limiter);
 mongodbConnection().catch((err) => console.error("db connection failed".bgRed));
 
 // routing implement
-
 readdirSync("./src/routes").map(function (r) {
   return app.use("/api/v1", require(`./src/routes/${r}`));
 });
@@ -60,9 +60,10 @@ app.use((req, res, next) => {
 
 // error handler route
 app.use((err, req, res, next) => {
-  console.log(err.message);
-  res.status(err.status || 500).json({
-    success: false,
+  // custom error handle
+
+  return errorResponse(res, {
+    statusCode: err.status,
     message: err.message,
   });
 });
